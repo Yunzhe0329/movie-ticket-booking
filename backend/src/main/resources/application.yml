@@ -3,7 +3,7 @@ spring:
     name: movie-ticket-booking
 
   datasource:
-    url: JDBC:postgresql://localhost:5432/${DB_NAME:ticket}
+    url: jdbc:postgresql://localhost:5432/${DB_NAME:ticket}
     username: ${DB_USER:ticket}
     password: ${DB_PASSWORD:ticket}
 

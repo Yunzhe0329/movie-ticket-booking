@@ -226,3 +226,23 @@ MVP：瀏覽器（React SPA）→ Nginx（API 入口）→ Spring Boot API Serve
 
 5. 付款和排程都以 `status = 'PENDING'` 為條件，同一筆訂單只有一方會成功，不會出現「已付款又被釋放」。
 6. 權衡：排程每分鐘跑一次，座位最慢會晚 1 分鐘釋放；這段時間別人選不到，但不會出錯。
+
+## 8. 專案結構與開發環境
+
+- Repo：單一 repo，`backend/`、`frontend/`、`nginx/` 並列，根目錄放 `docker-compose.yml`。
+- 後端套件按模組分：`com.example.ticket.{member, movie, showtime, booking, common}`；模組內實作類別盡量 package-private，只公開 Service 介面與 DTO。
+- 資料表歸屬：
+
+  | 模組 | 擁有的資料表 |
+    |---|---|
+  | member | member |
+  | movie | movie |
+  | showtime | hall、seat、showtime |
+  | booking | orders、showtime_seat |
+
+  `showtime_seat` 歸 booking：鎖位與建立訂單需在同一交易內完成。showtime 建立場次時，呼叫 booking 的介面產生場次座位；座位圖 API 組合 showtime（影廳排法）與 booking（是否可選）的資料。
+- 資料存取：Spring Data JPA；鎖位、付款、逾時釋放用 `@Modifying @Query` 寫條件 UPDATE 並檢查更新列數。
+- Migration：Flyway（原生 SQL），`ddl-auto=validate`，資料表只由 migration 建立。
+- 時區：資料庫與後端一律 UTC，顯示時再轉換。
+- 開發環境：Docker Compose 先只跑 PostgreSQL，後端在 IDE 執行；前端完成後再把 nginx、backend 加入 compose。
+- API 文件：springdoc-openapi（Swagger UI）。

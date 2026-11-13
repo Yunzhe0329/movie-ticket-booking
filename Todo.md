@@ -66,12 +66,6 @@
 - 付款倒數計時的顯示。
 - JWT 的存放位置與 API 請求的封裝。
 
-### C8. 專案結構與開發環境
-
-- 後端套件結構（如何在單一專案內落實模組邊界）。
-- 資料庫 migration 工具（Flyway 或 Liquibase）。
-- Docker Compose 的服務組成。
-- API 文件（OpenAPI／Swagger）。
 
 ## D. 已決定延後的項目
 
